@@ -27,8 +27,6 @@ Route::get('/', function () {
 
 Route::get('/level', [LevelController::class, 'index']);
 
-Route::get('/kategori', [KategoriController::class, 'index']);
-
 Route::get('/user', [UserController::class, 'index'])->name('user');
 
 Route::get('/home', [HomeController::class, 'home']);
@@ -51,3 +49,12 @@ Route::post('/user/tambah_simpan', [UserController::class, 'tambah_simpan'])->na
 Route::get('/user/ubah/{id}', [UserController::class, 'ubah'])->name('user.ubah');
 Route::put('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan'])->name('user.ubah_simpan');
 Route::get('/user/hapus/{id}', [UserController::class, 'hapus'])->name('user.hapus');
+
+
+Route::any('/kategori', [KategoriController::class, 'index'])->name('kategori');
+Route::get('/kategori/create', [KategoriController::class, 'create'])->name('kategori.create');
+Route::put('/kategori', [KategoriController::class, 'store'])->name('kategori.create_save');
+
+Route::get('/kategori/edit/{id}', [KategoriController::class, 'edit'])->name('kategori.edit');
+Route::put('/kategori/editSave/{id}', [KategoriController::class, 'edit_save'])->name('kategori.edit_save');
+Route::delete('/kategori/hapus/{id}', [KategoriController::class, 'hapus'])->name('kategori.hapus');
