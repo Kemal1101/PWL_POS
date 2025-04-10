@@ -27,8 +27,6 @@ Route::get('/', function () {
 
 Route::get('/level', [LevelController::class, 'index']);
 
-Route::get('/user', [UserController::class, 'index'])->name('user');
-
 Route::get('/home', [HomeController::class, 'home']);
 
 Route::prefix('category')->group(function () {
@@ -42,8 +40,14 @@ Route::get('/profil/name/{name}/umur/{umur}/nim/{nim}', [ProfilController::class
 
 Route::get('/penjualan', [PenjualanController::class, 'penjualan']);
 
-Route::get('/user/tambah', [UserController::class, 'tambah'])->name('user.tambah');
+Route::get('/user', [UserController::class, 'index'])->name('user');
+Route::get('/user/getUsers', [UserController::class, 'getUsers'])->name('user.getUsers');
 
+//route simpan ajax
+Route::get('/user/create_ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax');
+Route::post('/user/ajax', [UserController::class, 'store_ajax'])->name('user.store_ajax');
+
+Route::get('/user/tambah', [UserController::class, 'tambah'])->name('user.tambah');
 Route::post('/user/tambah_simpan', [UserController::class, 'tambah_simpan'])->name('user.simpan');
 
 Route::get('/user/ubah/{id}', [UserController::class, 'ubah'])->name('user.ubah');
@@ -53,7 +57,7 @@ Route::get('/user/hapus/{id}', [UserController::class, 'hapus'])->name('user.hap
 
 Route::any('/kategori', [KategoriController::class, 'index'])->name('kategori');
 Route::get('/kategori/create', [KategoriController::class, 'create'])->name('kategori.create');
-Route::put('/kategori', [KategoriController::class, 'store'])->name('kategori.create_save');
+Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.create_save');
 
 Route::get('/kategori/edit/{id}', [KategoriController::class, 'edit'])->name('kategori.edit');
 Route::put('/kategori/editSave/{id}', [KategoriController::class, 'edit_save'])->name('kategori.edit_save');

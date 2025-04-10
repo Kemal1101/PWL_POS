@@ -13,18 +13,28 @@
             <h3 class="card-title">Buat Kategori Baru</h3>
         </div>
 
+        {{-- Tampilkan pesan error jika ada --}}
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('kategori.create_save') }}">
             @csrf {{-- CSRF Token --}}
             {{ csrf_field() }}
-            {{ method_field('PUT') }}
             <div class="card-body">
                 <div class="form-group">
                     <label for="kodeKategori">Kode Kategori</label>
-                    <input type="text" class="form-control" id="kodeKategori" name="kodeKategori" placeholder="Masukkan kode kategori">
+                    <input type="text" class="form-control" id="kodeKategori" name="kategori_kode" placeholder="Masukkan kode kategori">
                 </div>
                 <div class="form-group">
                     <label for="namaKategori">Nama Kategori</label>
-                    <input type="text" class="form-control" id="namaKategori" name="namaKategori" placeholder="Masukkan nama kategori">
+                    <input type="text" class="form-control" id="namaKategori" name="kategori_nama" placeholder="Masukkan nama kategori">
                 </div>
             </div>
 
