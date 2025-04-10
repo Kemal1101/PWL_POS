@@ -32,19 +32,24 @@ class UserController extends Controller
                 ->addColumn('level_nama', function ($user) {
                     return $user->level ? $user->level->level_nama : '-'; // Pastikan mengakses properti level_nama
                 })
+                ->addColumn('id', function ($user) {
+                    return $user->user_id;
+                })
                 ->rawColumns(['level_nama']) // Pastikan kolom bisa di-render sebagai teks
                 ->make(true);
         }
     }
 
-    public function create_ajax(){
+    public function create_ajax()
+    {
         $level = LevelModel::select('level_id', 'level_nama')->get();
 
         return view('user.create_ajax')
-                ->with('level', $level);
+            ->with('level', $level);
     }
 
-    public function store_ajax(Request $request) {
+    public function store_ajax(Request $request)
+    {
         // Cek apakah request berupa AJAX atau ingin JSON response
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
@@ -83,6 +88,55 @@ class UserController extends Controller
             'message' => 'Request tidak valid'
         ], 400);
     }
+    
+    public function edit_ajax(String $id){
+        $user = UserModel::find($id);
+        $level = LevelModel::select('level_id', 'level_nama')->get();
+
+        return view('user.edit_ajax', ['user' => $user, 'level' => $level]);
+    }
+
+    public function update_ajax(Request $request, String $id){
+        // cek apakah request dari ajax
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'level_id' => 'required|integer',
+                'username' => 'required|max:20|unique:m_user,username,'.$id.',user_id',
+                'nama'     => 'required|max:100',
+                'password' => 'nullable|min:6|max:20'
+            ];
+
+            // use Illuminate\Support\Facades\Validator;
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status'   => false,    // respon json, true: berhasil, false: gagal
+                    'message'  => 'Validasi gagal.',
+                    'msgField' => $validator->errors()  // menunjukkan field mana yang error
+                ]);
+            }
+
+            $check = UserModel::find($id);
+            if ($check) {
+                if(!$request->filled('password') ){ // jika password tidak diisi, maka hapus dari request
+                    $request->request->remove('password');
+                }
+                $check->update($request->all());
+                return response()->json([
+                    'status'  => true,
+                    'message' => 'Data berhasil diupdate'
+                ]);
+            } else{
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+        return redirect('/');
+    }
+
 
     public function tambah()
     {

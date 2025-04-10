@@ -89,8 +89,11 @@
                     data: null,
                     name: 'aksi',
                     render: function(data, type, row) {
-                        return `<button class="btn btn-sm btn-primary">Edit</button>
-                                <button class="btn btn-sm btn-danger">Hapus</button>`;
+                        let url = `{{ route('user.edit_ajax', ['id' => ':id']) }}`;
+                        url = url.replace(':id', row.user_id);
+
+                        return `<button onclick="modalAction('${url}')" class="btn btn-sm btn-primary">Edit</button>
+                        <button class="btn btn-sm btn-danger">Hapus</button>`;
                     }
                 }
             ]
