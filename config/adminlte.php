@@ -329,12 +329,18 @@ return [
             'label' => 4,
             'label_color' => 'success',
         ],
-        ['header' => 'account_settings'],
+        ['header' => 'PENGGUNA'],
         [
             'text' => 'User',
             'url' => 'user',
             'icon' => 'fas fa-fw fa-user',
         ],
+        [
+            'text' => 'Level Pengguna',
+            'url' => 'level',
+            'icon' => 'fas fa-layer-group',
+        ],
+        ['header' => 'DATA BARANG'],
         [
             'text' => 'Kategori',
             'url' => 'kategori',
