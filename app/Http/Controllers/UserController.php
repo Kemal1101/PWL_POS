@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserAddPostRequest;
 use App\Models\LevelModel;
 use App\Models\UserModel;
+use Dotenv\Util\Str;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -88,7 +89,7 @@ class UserController extends Controller
             'message' => 'Request tidak valid'
         ], 400);
     }
-    
+
     public function edit_ajax(String $id){
         $user = UserModel::find($id);
         $level = LevelModel::select('level_id', 'level_nama')->get();
@@ -137,6 +138,27 @@ class UserController extends Controller
         return redirect('/');
     }
 
+    public function confirm_ajax(String $id){
+        $user = UserModel::find($id);
+        return view('user.confirm_ajax', ['user' => $user]);
+    }
+
+    public function delete_ajax(Request $request, String $id){
+        $user = UserModel::find($id);
+        $user->delete();
+        if ($user) {
+            return response()->json([
+                'status'  => true,
+                'message' => 'Data berhasil dihapus'
+            ]);
+        }else{
+            return response()->json([
+                'status'  => false,
+                'message' => 'Data tidak ditemukan'
+            ]);
+        }
+        return redirect('/user');
+    }
 
     public function tambah()
     {

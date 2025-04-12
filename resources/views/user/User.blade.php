@@ -89,11 +89,13 @@
                     data: null,
                     name: 'aksi',
                     render: function(data, type, row) {
-                        let url = `{{ route('user.edit_ajax', ['id' => ':id']) }}`;
-                        url = url.replace(':id', row.user_id);
+                        let url_edit = `{{ route('user.edit_ajax', ['id' => ':id']) }}`;
+                        url_edit = url_edit.replace(':id', row.user_id);
+                        let url_hapus = `{{ route('user.confirm_ajax', ['id' => ':id']) }}`;
+                        url_hapus = url_hapus.replace(':id', row.user_id);
 
-                        return `<button onclick="modalAction('${url}')" class="btn btn-sm btn-primary">Edit</button>
-                        <button class="btn btn-sm btn-danger">Hapus</button>`;
+                        return `<button onclick="modalAction('${url_edit}')" class="btn btn-sm btn-primary">Edit</button>
+                        <button button onclick="modalAction('${url_hapus}')" class="btn btn-sm btn-danger">Hapus</button>`;
                     }
                 }
             ]

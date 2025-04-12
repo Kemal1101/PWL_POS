@@ -48,20 +48,25 @@ Route::get('/kategori/edit/{id}', [KategoriController::class, 'edit'])->name('ka
 Route::put('/kategori/editSave/{id}', [KategoriController::class, 'edit_save'])->name('kategori.edit_save');
 Route::delete('/kategori/hapus/{id}', [KategoriController::class, 'hapus'])->name('kategori.hapus');
 
-// ** U S E R **
-Route::get('/user', [UserController::class, 'index'])->name('user');
-Route::get('/user/getUsers', [UserController::class, 'getUsers'])->name('user.getUsers');
 
-//route simpan ajax
-Route::get('/user/create_ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax');
-Route::post('/user/ajax', [UserController::class, 'store_ajax'])->name('user.store_ajax');
+Route::group(['prefix' => 'user'], function () {
+    Route::get('/', [UserController::class, 'index'])->name('user');
+    Route::get('/getUsers', [UserController::class, 'getUsers'])->name('user.getUsers');
+    // route simpan ajax
+    Route::get('/create_ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax');
+    Route::post('/ajax', [UserController::class, 'store_ajax'])->name('user.store_ajax');
+    //route edit ajax
+    Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax'])->name('user.edit_ajax');
+    Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax'])->name('user.update_ajax');
+    //route hapus ajax
+    Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax'])->name('user.confirm_ajax');
+    Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax'])->name('user.delete_ajax');
 
-Route::get('user/{id}/edit_ajax', [UserController::class, 'edit_ajax'])->name('user.edit_ajax');
-Route::put('user/{id}/update_ajax', [UserController::class, 'update_ajax'])->name('user.update_ajax');
+    Route::get('/tambah', [UserController::class, 'tambah'])->name('user.tambah');
+    Route::post('/tambah_simpan', [UserController::class, 'tambah_simpan'])->name('user.simpan');
 
-Route::get('/user/tambah', [UserController::class, 'tambah'])->name('user.tambah');
-Route::post('/user/tambah_simpan', [UserController::class, 'tambah_simpan'])->name('user.simpan');
+    Route::get('/ubah/{id}', [UserController::class, 'ubah'])->name('user.ubah');
+    Route::put('/ubah_simpan/{id}', [UserController::class, 'ubah_simpan'])->name('user.ubah_simpan');
 
-Route::get('/user/ubah/{id}', [UserController::class, 'ubah'])->name('user.ubah');
-Route::put('/user/ubah_simpan/{id}', [UserController::class, 'ubah_simpan'])->name('user.ubah_simpan');
-Route::get('/user/hapus/{id}', [UserController::class, 'hapus'])->name('user.hapus');
+    Route::get('/hapus/{id}', [UserController::class, 'hapus'])->name('user.hapus');
+});
