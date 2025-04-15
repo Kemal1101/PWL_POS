@@ -40,13 +40,20 @@ Route::get('/profil/name/{name}/umur/{umur}/nim/{nim}', [ProfilController::class
 
 Route::get('/penjualan', [PenjualanController::class, 'penjualan']);
 
-Route::any('/kategori', [KategoriController::class, 'index'])->name('kategori');
-Route::get('/kategori/create', [KategoriController::class, 'create'])->name('kategori.create');
-Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.create_save');
+Route::group(['prefix' => 'kategori'], function () {
+    Route::get('/', [KategoriController::class, 'index'])->name('kategori');
+    Route::get('/getUsers', [KategoriController::class, 'getKategoris'])->name('kategori.getKategoris');
+    Route::get('/create_ajax', [KategoriController::class, 'create_ajax'])->name('kategori.create_ajax');
+    Route::post('/store_ajax', [KategoriController::class, 'store_ajax'])->name('kategori.store_ajax');
 
-Route::get('/kategori/edit/{id}', [KategoriController::class, 'edit'])->name('kategori.edit');
-Route::put('/kategori/editSave/{id}', [KategoriController::class, 'edit_save'])->name('kategori.edit_save');
-Route::delete('/kategori/hapus/{id}', [KategoriController::class, 'hapus'])->name('kategori.hapus');
+    Route::get('{id}/edit', [KategoriController::class, 'edit_ajax'])->name('kategori.edit_ajax');
+    Route::put('/{id}/update_ajax', [KategoriController::class, 'update_ajax'])->name('kategori.update_ajax');
+
+    Route::get('/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax'])->name('kategori.confirm_ajax');
+    Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax'])->name('kategori.delete_ajax');
+});
+
+
 
 
 Route::group(['prefix' => 'user'], function () {

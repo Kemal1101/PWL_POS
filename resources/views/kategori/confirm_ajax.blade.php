@@ -1,4 +1,4 @@
-@empty($level)
+@empty($kategori)
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,12 +9,12 @@
                 <div class="alert alert-danger">
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
                     Data yang anda cari tidak ditemukan</div>
-                <a href="{{ route('level') }}" class="btn btn-warning">Kembali</a>
+                <a href="{{ route('kategori') }}" class="btn btn-warning">Kembali</a>
             </div>
         </div>
     </div>
 @else
-    <form action="{{ route('level.delete_ajax', ['id' => $level->level_id]) }}" method="POST" id="form-delete">
+    <form action="{{ route('kategori.delete_ajax', ['id' => $kategori->kategori_id]) }}" method="POST" id="form-delete">
     @csrf
     @method('DELETE')
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
@@ -29,8 +29,8 @@
                     Apakah Anda ingin menghapus data seperti di bawah ini?
                 </div>
                 <table class="table table-sm table-bordered table-striped">
-                    <tr><th class="text-right col-3">Username :</th><td class="col-9">{{ $level->level_nama }}</td></tr>
-                    <tr><th class="text-right col-3">Kode Level :</th><td class="col-9">{{ $level->level_kode }}</td></tr>
+                    <tr><th class="text-right col-3">Username :</th><td class="col-9">{{ $kategori->kategori_nama}}</td></tr>
+                    <tr><th class="text-right col-3">Kode Kategori :</th><td class="col-9">{{ $kategori->kategori_kode}}</td></tr>
                 </table>
             </div>
             <div class="modal-footer">

@@ -1,4 +1,4 @@
-@empty($level)
+@empty($kategori)
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,41 +9,51 @@
                 <div class="alert alert-danger">
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
                     Data yang anda cari tidak ditemukan</div>
-                <a href="{{ route('level') }}" class="btn btn-warning">Kembali</a>
+                <a href="{{ url('/kategori') }}" class="btn btn-warning">Kembali</a>
             </div>
         </div>
     </div>
 @else
-    <form action="{{ route('level.delete_ajax', ['id' => $level->level_id]) }}" method="POST" id="form-delete">
+    <form action="{{ route('kategori.update_ajax', ['id' => $kategori->kategori_id]) }}" method="POST" id="form-edit">
     @csrf
-    @method('DELETE')
+    @method('PUT')
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Hapus Data User</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Data Kategori</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div class="alert alert-warning">
-                    <h5><i class="icon fas fa-ban"></i> Konfirmasi !!!</h5>
-                    Apakah Anda ingin menghapus data seperti di bawah ini?
-                </div>
-                <table class="table table-sm table-bordered table-striped">
-                    <tr><th class="text-right col-3">Username :</th><td class="col-9">{{ $level->level_nama }}</td></tr>
-                    <tr><th class="text-right col-3">Kode Level :</th><td class="col-9">{{ $level->level_kode }}</td></tr>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                <button type="submit" class="btn btn-primary">Ya, Hapus</button>
+                <form id="formKategori">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="kategori_nama">Nama kategori</label>
+                            <input type="text" name="kategori_nama" id="kategori_nama" class="form-control" required>
+                            <small id="error-kategori_nama" class="form-text text-danger"></small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="kategori_kode">Kode kategori</label>
+                            <input type="text" name="kategori_kode" id="kategori_kode" class="form-control" required>
+                            <small id="error-kategori_kode" class="form-text text-danger"></small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
     </form>
     <script>
         $(document).ready(function() {
-            $("#form-delete").validate({
-                rules: {},
+            $("#form-edit").validate({
+                rules: {
+                    level_nama: {required: true, minlength: 3, maxlength: 20},
+                    level_kode: {required: true, minlength: 4, maxlength: 4},
+                },
                 submitHandler: function(form) {
                     $.ajax({
                         url: form.action,
@@ -89,6 +99,5 @@
         $(document).on('click', '[data-dismiss="modal"]', function() {
             $('#myModal').modal('hide');
         });
-
     </script>
 @endempty
