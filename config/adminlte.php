@@ -347,9 +347,9 @@ return [
             'icon' => 'fas fa-list',
         ],
         [
-            'text' => 'change_password',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
+            'text' => 'Barang',
+            'url' => 'barang',
+            'icon' => 'fas fa-fw fa-box',
         ],
         [
             'text' => 'multilevel',

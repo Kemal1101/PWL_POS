@@ -7,6 +7,7 @@ use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BarangController;
 use Illuminate\Support\Facades\Route;
 use Monolog\Level;
 
@@ -61,7 +62,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('/getUsers', [UserController::class, 'getUsers'])->name('user.getUsers');
     // route simpan ajax
     Route::get('/create_ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax');
-    Route::post('/ajax', [UserController::class, 'store_ajax'])->name('user.store_ajax');
+    Route::post('/store_ajax', [UserController::class, 'store_ajax'])->name('user.store_ajax');
     //route edit ajax
     Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax'])->name('user.edit_ajax');
     Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax'])->name('user.update_ajax');
@@ -83,11 +84,26 @@ Route::group(['prefix' => 'level'], function () {
     Route::get('/getLevels', [LevelController::class, 'getLevels'])->name('level.getLevels');
     // route simpan ajax
     Route::get('/create_ajax', [LevelController::class, 'create_ajax'])->name('level.create_ajax');
-    Route::post('/ajax', [LevelController::class, 'store_ajax'])->name('level.store_ajax');
+    Route::post('/store_ajax', [LevelController::class, 'store_ajax'])->name('level.store_ajax');
     //route edit ajax
     Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax'])->name('level.edit_ajax');
     Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax'])->name('level.update_ajax');
     //route hapus ajax
     Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax'])->name('level.confirm_ajax');
     Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax'])->name('level.delete_ajax');
+});
+
+
+Route::group(['prefix' => 'barang'], function (){
+    Route::get('/', [BarangController::class, 'index'])->name('barang');
+    Route::get('/getBarangs', [BarangController::class, 'getBarangs'])->name('barang.getBarangs');
+    // route simpan ajax
+    Route::get('/create_ajax', [BarangController::class, 'create_ajax'])->name('barang.create_ajax');
+    Route::post('/store_ajax', [BarangController::class, 'store_ajax'])->name('barang.store_ajax');
+    //route edit ajax
+    Route::get('/{id}/edit_ajax', [BarangController::class, 'edit_ajax'])->name('barang.edit_ajax');
+    Route::put('/{id}/update_ajax', [BarangController::class, 'update_ajax'])->name('barang.update_ajax');
+    //route hapus ajax
+    Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax'])->name('barang.confirm_ajax');
+    Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax'])->name('barang.delete_ajax');
 });

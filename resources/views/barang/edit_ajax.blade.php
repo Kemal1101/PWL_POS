@@ -1,4 +1,4 @@
-@empty($kategori)
+@empty($barang)
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,41 +9,71 @@
                 <div class="alert alert-danger">
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
                     Data yang anda cari tidak ditemukan</div>
-                <a href="{{ route('kategori') }}" class="btn btn-warning">Kembali</a>
+                <a href="{{ url('/barang') }}" class="btn btn-warning">Kembali</a>
             </div>
         </div>
     </div>
 @else
-    <form action="{{ route('kategori.delete_ajax', ['id' => $kategori->kategori_id]) }}" method="POST" id="form-delete">
+    <form action="{{ route('barang.update_ajax', ['id' => $barang->barang_id]) }}" method="POST" id="form-edit">
     @csrf
-    @method('DELETE')
+    @method('PUT')
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Hapus Data User</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Edit Data Barang</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <div class="alert alert-warning">
-                    <h5><i class="icon fas fa-ban"></i> Konfirmasi !!!</h5>
-                    Apakah Anda ingin menghapus data seperti di bawah ini?
+                <div class="form-group">
+                    <label>Nama Barang</label>
+                    <input value="{{ $barang->barang_nama }}" type="text" name="barang_nama" id="barang_nama" class="form-control" required>
+                    <small id="error-barang_nama" class="error-text form-text text-danger"></small>
                 </div>
-                <table class="table table-sm table-bordered table-striped">
-                    <tr><th class="text-right col-3">Username :</th><td class="col-9">{{ $kategori->kategori_nama}}</td></tr>
-                    <tr><th class="text-right col-3">Kode Kategori :</th><td class="col-9">{{ $kategori->kategori_kode}}</td></tr>
-                </table>
+                <div class="form-group">
+                    <label>Kode Barang</label>
+                    <input value="{{ $barang->barang_kode }}" type="text" name="barang_kode" id="barang_kode" class="form-control" required>
+                    <small id="error-barang_kode" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Kategori</label>
+                    <select name="kategori_id" id="kategori_id" class="form-control" required>
+                        <option value="">- Pilih kategori -</option>
+                        @foreach($kategori as $l)
+                            <option {{ ($l->kategori_id == $barang->kategori_id) ? 'selected' : '' }} value="{{ $l->kategori_id }}">
+                                {{ $l->kategori_nama }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <small id="error-kategori_id" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Harga Beli</label>
+                    <input value="{{ $barang->harga_beli }}" type="number" name="harga_beli" id="harga_beli" class="form-control" required>
+                    <small id="error-harga_beli" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Harga Jual</label>
+                    <input value="{{ $barang->harga_jual }}" type="number" name="harga_jual" id="harga_jual" class="form-control" required>
+                    <small id="error-harga_jual" class="error-text form-text text-danger"></small>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
-                <button type="submit" class="btn btn-primary">Ya, Hapus</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
         </div>
     </div>
     </form>
     <script>
         $(document).ready(function() {
-            $("#form-delete").validate({
-                rules: {},
+            $("#form-edit").validate({
+                rules: {
+                    kategori_id: {required: true, number: true},
+                    barang_nama: {required: true, minlength: 3, maxlength: 100},
+                    barang_kode: {required: true, minlength: 6, maxlength: 6},
+                    harga_beli: {required: true, number: true},
+                    harga_jual: {required: true, number: true},
+                },
                 submitHandler: function(form) {
                     $.ajax({
                         url: form.action,
@@ -57,7 +87,8 @@
                                     title: 'Berhasil',
                                     text: response.message
                                 });
-                                dataKategori.ajax.reload();
+                                $('#kategori_id').val('');
+                                dataBarang.ajax.reload();
                             }else{
                                 $('.error-text').text('');
                                 $.each(response.msgField, function(prefix, val) {
@@ -89,6 +120,5 @@
         $(document).on('click', '[data-dismiss="modal"]', function() {
             $('#myModal').modal('hide');
         });
-
     </script>
 @endempty

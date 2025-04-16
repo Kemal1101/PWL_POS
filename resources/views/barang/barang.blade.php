@@ -4,8 +4,7 @@
     <div class="card card-outline card-primary">
         <div class="card-header">
             <div class="card-tools">
-                {{-- <a class="btn btn-sm btn-primary mt-1" href="{{ route('level.tambah') }}">Tambahhh</a> --}}
-                <button onclick="modalAction('{{ route('kategori.create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
+                <button onclick="modalAction('{{ route('barang.create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
             </div>
         </div>
         <div class="card-body">
@@ -16,12 +15,14 @@
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
 
-            <table id="table_kategori" class="table table-bordered">
+            <table id="table_barang" class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Nama Kategori</th>
-                        <th>Kode Kategori</th>
-                        <th>ID Kategori</th>
+                        <th>Nama Barang</th>
+                        <th>Kode Barang</th>
+                        <th>Kategori</th>
+                        <th>Harga Beli</th>
+                        <th>Harga Jual</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -48,32 +49,43 @@
     }
 
 
-    var dataKategori;
+    var dataBarang;
     $(document).ready(function() {
-        dataKategori = $('#table_kategori').DataTable({
+        dataBarang = $('#table_barang').DataTable({
             processing: true,
             serverSide: true,
             ajax: {
-                url: "{{ route('kategori.getKategoris') }}",
+                url: "{{ route('barang.getBarangs') }}",
                 type: "GET",
+                data: function(d) {
+                    d.kategori_id = $('#kategori_id').val();
+                }
             },
             columns: [
-                { data: 'kategori_nama', name: 'kategori_nama' },
-                { data: 'kategori_kode', name: 'kategori_kode' },
-                { data: 'kategori_id', name: 'kategori_id' }, // Pastikan ini sesuai dengan kolom di controller
+                { data: 'barang_nama', name: 'barang_nama' },
+                { data: 'barang_kode', name: 'barang_kode' },
+                { data: 'kategori_nama', name: 'kategori_nama' }, // Pastikan ini sesuai dengan kolom di controller
+                { data: 'harga_beli', name: 'harga_beli' }, // Pastikan ini sesuai dengan kolom di controller
+                { data: 'harga_jual', name: 'harga_jual' }, // Pastikan ini sesuai dengan kolom di controller
                 {
                     data: null,
                     name: 'aksi',
                     render: function(data, type, row) {
-                        let url_edit = `{{ route('kategori.edit_ajax', ['id' => ':id']) }}`;
-                        url_edit = url_edit.replace(':id', row.kategori_id);
-                        let url_hapus = `{{ route('kategori.confirm_ajax', ['id' => ':id']) }}`;
-                        url_hapus = url_hapus.replace(':id', row.kategori_id);
+                        let url_edit = `{{ route('barang.edit_ajax', ['id' => ':id']) }}`;
+                        url_edit = url_edit.replace(':id', row.barang_id);
+                        let url_hapus = `{{ route('barang.confirm_ajax', ['id' => ':id']) }}`;
+                        url_hapus = url_hapus.replace(':id', row.barang_id);
+
                         return `<button onclick="modalAction('${url_edit}')" class="btn btn-sm btn-primary">Edit</button>
                         <button button onclick="modalAction('${url_hapus}')" class="btn btn-sm btn-danger">Hapus</button>`;
                     }
                 }
             ]
+        });
+
+        // Event listener untuk filter kategori_id
+        $('#kategori_id').change(function() {
+            dataBarang.ajax.reload();
         });
     });
 </script>
