@@ -7,7 +7,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
 class HomeController extends Controller{
-    public function home(){
+    public function index(){
         return view('Home');
     }
 }
