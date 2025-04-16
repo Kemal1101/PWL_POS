@@ -44,41 +44,32 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
 
     Route::get('/penjualan', [PenjualanController::class, 'penjualan']);
 
-    Route::group(['prefix' => 'kategori'], function () {
-        Route::get('/', [KategoriController::class, 'index'])->name('kategori');
-        Route::get('/getUsers', [KategoriController::class, 'getKategoris'])->name('kategori.getKategoris');
-        Route::get('/create_ajax', [KategoriController::class, 'create_ajax'])->name('kategori.create_ajax');
-        Route::post('/store_ajax', [KategoriController::class, 'store_ajax'])->name('kategori.store_ajax');
-
-        Route::get('{id}/edit', [KategoriController::class, 'edit_ajax'])->name('kategori.edit_ajax');
-        Route::put('/{id}/update_ajax', [KategoriController::class, 'update_ajax'])->name('kategori.update_ajax');
-
-        Route::get('/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax'])->name('kategori.confirm_ajax');
-        Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax'])->name('kategori.delete_ajax');
-    });
-    Route::group(['prefix' => 'user'], function () {
-        Route::get('/', [UserController::class, 'index'])->name('user');
-        Route::get('/getUsers', [UserController::class, 'getUsers'])->name('user.getUsers');
-        // route simpan ajax
-        Route::get('/create_ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax');
-        Route::post('/store_ajax', [UserController::class, 'store_ajax'])->name('user.store_ajax');
-        //route edit ajax
-        Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax'])->name('user.edit_ajax');
-        Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax'])->name('user.update_ajax');
-        //route hapus ajax
-        Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax'])->name('user.confirm_ajax');
-        Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax'])->name('user.delete_ajax');
-
-        Route::get('/tambah', [UserController::class, 'tambah'])->name('user.tambah');
-        Route::post('/tambah_simpan', [UserController::class, 'tambah_simpan'])->name('user.simpan');
-
-        Route::get('/ubah/{id}', [UserController::class, 'ubah'])->name('user.ubah');
-        Route::put('/ubah_simpan/{id}', [UserController::class, 'ubah_simpan'])->name('user.ubah_simpan');
-
-        Route::get('/hapus/{id}', [UserController::class, 'hapus'])->name('user.hapus');
-    });
-
     Route::middleware(['authorize:ADM'])->group(function () {
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', [UserController::class, 'index'])->name('user');
+            Route::get('/getUsers', [UserController::class, 'getUsers'])->name('user.getUsers');
+            // route simpan ajax
+            Route::get('/create_ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax');
+            Route::post('/store_ajax', [UserController::class, 'store_ajax'])->name('user.store_ajax');
+            //route edit ajax
+            Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax'])->name('user.edit_ajax');
+            Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax'])->name('user.update_ajax');
+            //route hapus ajax
+            Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax'])->name('user.confirm_ajax');
+            Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax'])->name('user.delete_ajax');
+
+            Route::get('/tambah', [UserController::class, 'tambah'])->name('user.tambah');
+            Route::post('/tambah_simpan', [UserController::class, 'tambah_simpan'])->name('user.simpan');
+
+            Route::get('/ubah/{id}', [UserController::class, 'ubah'])->name('user.ubah');
+            Route::put('/ubah_simpan/{id}', [UserController::class, 'ubah_simpan'])->name('user.ubah_simpan');
+
+            Route::get('/hapus/{id}', [UserController::class, 'hapus'])->name('user.hapus');
+        });
+
+    });
+
+    Route::middleware(['authorize:ADM,MNG'])->group(function () {
         Route::group(['prefix' => 'level'], function () {
             Route::get('/', [LevelController::class, 'index'])->name('level');
             Route::get('/getLevels', [LevelController::class, 'getLevels'])->name('level.getLevels');
@@ -94,6 +85,36 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         });
     });
 
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
+        Route::group(['prefix' => 'kategori'], function () {
+            Route::get('/', [KategoriController::class, 'index'])->name('kategori');
+            Route::get('/getUsers', [KategoriController::class, 'getKategoris'])->name('kategori.getKategoris');
+            Route::get('/create_ajax', [KategoriController::class, 'create_ajax'])->name('kategori.create_ajax');
+            Route::post('/store_ajax', [KategoriController::class, 'store_ajax'])->name('kategori.store_ajax');
+
+            Route::get('{id}/edit', [KategoriController::class, 'edit_ajax'])->name('kategori.edit_ajax');
+            Route::put('/{id}/update_ajax', [KategoriController::class, 'update_ajax'])->name('kategori.update_ajax');
+
+            Route::get('/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax'])->name('kategori.confirm_ajax');
+            Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax'])->name('kategori.delete_ajax');
+        });
+
+        Route::group(['prefix' => 'supplier'], function (){
+            Route::get('/', [SupplierController::class, 'index'])->name('supplier');
+            Route::get('/getsuppliers', [SupplierController::class, 'getsuppliers'])->name('supplier.getsuppliers');
+            // route simpan ajax
+            Route::get('/create_ajax', [SupplierController::class, 'create_ajax'])->name('supplier.create_ajax');
+            Route::post('/store_ajax', [SupplierController::class, 'store_ajax'])->name('supplier.store_ajax');
+            //route edit ajax
+            Route::get('/{id}/edit_ajax', [SupplierController::class, 'edit_ajax'])->name('supplier.edit_ajax');
+            Route::put('/{id}/update_ajax', [SupplierController::class, 'update_ajax'])->name('supplier.update_ajax');
+            //route hapus ajax
+            Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax'])->name('supplier.confirm_ajax');
+            Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax'])->name('supplier.delete_ajax');
+        });
+
+    });
+
     Route::group(['prefix' => 'barang'], function (){
         Route::get('/', [BarangController::class, 'index'])->name('barang');
         Route::get('/getBarangs', [BarangController::class, 'getBarangs'])->name('barang.getBarangs');
@@ -107,20 +128,5 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax'])->name('barang.confirm_ajax');
         Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax'])->name('barang.delete_ajax');
     });
-
-    Route::group(['prefix' => 'supplier'], function (){
-        Route::get('/', [SupplierController::class, 'index'])->name('supplier');
-        Route::get('/getsuppliers', [SupplierController::class, 'getsuppliers'])->name('supplier.getsuppliers');
-        // route simpan ajax
-        Route::get('/create_ajax', [SupplierController::class, 'create_ajax'])->name('supplier.create_ajax');
-        Route::post('/store_ajax', [SupplierController::class, 'store_ajax'])->name('supplier.store_ajax');
-        //route edit ajax
-        Route::get('/{id}/edit_ajax', [SupplierController::class, 'edit_ajax'])->name('supplier.edit_ajax');
-        Route::put('/{id}/update_ajax', [SupplierController::class, 'update_ajax'])->name('supplier.update_ajax');
-        //route hapus ajax
-        Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax'])->name('supplier.confirm_ajax');
-        Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax'])->name('supplier.delete_ajax');
-    });
-
 });
 
