@@ -78,20 +78,21 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         Route::get('/hapus/{id}', [UserController::class, 'hapus'])->name('user.hapus');
     });
 
-    Route::group(['prefix' => 'level'], function () {
-        Route::get('/', [LevelController::class, 'index'])->name('level');
-        Route::get('/getLevels', [LevelController::class, 'getLevels'])->name('level.getLevels');
-        // route simpan ajax
-        Route::get('/create_ajax', [LevelController::class, 'create_ajax'])->name('level.create_ajax');
-        Route::post('/store_ajax', [LevelController::class, 'store_ajax'])->name('level.store_ajax');
-        //route edit ajax
-        Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax'])->name('level.edit_ajax');
-        Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax'])->name('level.update_ajax');
-        //route hapus ajax
-        Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax'])->name('level.confirm_ajax');
-        Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax'])->name('level.delete_ajax');
+    Route::middleware(['authorize:ADM'])->group(function () {
+        Route::group(['prefix' => 'level'], function () {
+            Route::get('/', [LevelController::class, 'index'])->name('level');
+            Route::get('/getLevels', [LevelController::class, 'getLevels'])->name('level.getLevels');
+            // route simpan ajax
+            Route::get('/create_ajax', [LevelController::class, 'create_ajax'])->name('level.create_ajax');
+            Route::post('/store_ajax', [LevelController::class, 'store_ajax'])->name('level.store_ajax');
+            //route edit ajax
+            Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax'])->name('level.edit_ajax');
+            Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax'])->name('level.update_ajax');
+            //route hapus ajax
+            Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax'])->name('level.confirm_ajax');
+            Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax'])->name('level.delete_ajax');
+        });
     });
-
 
     Route::group(['prefix' => 'barang'], function (){
         Route::get('/', [BarangController::class, 'index'])->name('barang');
