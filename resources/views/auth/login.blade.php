@@ -50,6 +50,9 @@
       </div>
 
       <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+      <div class="col-8 mt-3">
+        <a style="opacity: 0.75" href="{{ route('register') }}">Don't have an account? Sign Up</a>
+    </div>
     </form>
   </div>
 </div>
