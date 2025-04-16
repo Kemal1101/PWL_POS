@@ -3,26 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\DataTables\KategoriDataTable;
-use App\Models\KategoriModel;
-use Illuminate\Contracts\Cache\Store;
-use Illuminate\View\View;
-use App\Http\Requests\StorePostRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Redirect;
+use App\Models\SupplierModel;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 
-class KategoriController extends Controller
+class SupplierController extends Controller
 {
-
     public function index(){
-        return view('kategori.kategori');
+        return view('supplier.supplier');
     }
-    public function getKategoris(Request $request)
+
+    public function getSuppliers(Request $request)
     {
         if ($request->ajax()) {
-            $query = KategoriModel::all();
+            $query = SupplierModel::all();
 
             return DataTables::of($query)->make(true);
         }
@@ -30,32 +24,18 @@ class KategoriController extends Controller
 
     public function create_ajax()
     {
-        return view('kategori.create_ajax');
-    }
-    public function store(StorePostRequest $request): RedirectResponse
-    {
-        $validated = $request->validated();
-
-        $validated = $request->validate([
-            'kategori_kode' => 'bail|required|unique:m_kategori,kategori_kode',
-            'kategori_nama' => 'required',
-        ]);
-        KategoriModel::create($validated);
-        return redirect('/kategori');
-    }
-    public function edit_ajax(String $id){
-        $kategori = KategoriModel::find($id);
-
-        return view('kategori.edit_ajax', ['kategori' => $kategori]);
+        return view('supplier.create_ajax');
     }
 
-    public function store_ajax(Request $request)
-    {
+    public function store_ajax(Request $request){
         // Cek apakah request berupa AJAX atau ingin JSON response
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'kategori_nama' => 'required|string|min:3|max:100',
-                'kategori_kode' => 'required|string|min:4|max:4',
+                'supplier_nama' => 'required|string|min:3|max:100',
+                'supplier_kode' => 'required|string|min:4|max:4',
+                'supplier_alamat' => 'required|string|min:3|max:100',
+                'supplier_phonenumber' => 'required|string|min:3|max:100',
+
             ];
 
             $validator = Validator::make($request->all(), $rules);
@@ -69,9 +49,11 @@ class KategoriController extends Controller
             }
 
             // Simpan user dengan hashing password untuk keamanan
-            KategoriModel::create([
-                'kategori_nama' => $request->kategori_nama,
-                'kategori_kode' => $request->kategori_kode,
+            SupplierModel::create([
+                'supplier_nama' => $request->supplier_nama,
+                'supplier_kode' => $request->supplier_kode,
+                'supplier_alamat' => $request->supplier_alamat,
+                'supplier_phonenumber' => $request->supplier_phonenumber
             ]);
 
             return response()->json([
@@ -86,13 +68,20 @@ class KategoriController extends Controller
         ], 400);
     }
 
+    public function edit_ajax(String $id){
+        $supplier = SupplierModel::find($id);
+
+        return view('supplier.edit_ajax', ['supplier' => $supplier]);
+    }
 
     public function update_ajax(Request $request, String $id){
         // cek apakah request dari ajax
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'kategori_nama' => 'required|string|min:3|max:100',
-                'kategori_kode' => 'required|string|min:4|max:4',
+                'supplier_nama' => 'required|string|min:3|max:100',
+                'supplier_kode' => 'required|string|min:4|max:4',
+                'supplier_alamat' => 'required|string|min:3|max:100',
+                'supplier_phonenumber' => 'required|string|min:3|max:100',
             ];
 
             // use Illuminate\Support\Facades\Validator;
@@ -106,7 +95,7 @@ class KategoriController extends Controller
                 ]);
             }
 
-            $check = KategoriModel::find($id);
+            $check = SupplierModel::find($id);
             if ($check) {
                 $check->update($request->all());
                 return response()->json([
@@ -120,18 +109,17 @@ class KategoriController extends Controller
                 ]);
             }
         }
-        return redirect('/');
     }
 
     public function confirm_ajax(String $id){
-        $kategori = KategoriModel::find($id);
-        return view('kategori.confirm_ajax', ['kategori' => $kategori]);
+        $supplier = SupplierModel::find($id);
+        return view('supplier.confirm_ajax', ['supplier' => $supplier]);
     }
 
     public function delete_ajax(Request $request, String $id){
-        $kategori = KategoriModel::find($id);
-        $kategori->delete();
-        if ($kategori) {
+        $supplier = SupplierModel::find($id);
+        $supplier->delete();
+        if ($supplier) {
             return response()->json([
                 'status'  => true,
                 'message' => 'Data berhasil dihapus'
@@ -142,6 +130,6 @@ class KategoriController extends Controller
                 'message' => 'Data tidak ditemukan'
             ]);
         }
-        return redirect('/kategori');
+        return redirect('/supplier');
     }
 }

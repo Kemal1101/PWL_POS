@@ -1,4 +1,4 @@
-@empty($level)
+@empty($supplier)
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -9,51 +9,43 @@
                 <div class="alert alert-danger">
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
                     Data yang anda cari tidak ditemukan</div>
-                <a href="{{ url('/level') }}" class="btn btn-warning">Kembali</a>
+                <a href="{{ route('supplier') }}" class="btn btn-warning">Kembali</a>
             </div>
         </div>
     </div>
 @else
-    <form action="{{ route('level.update_ajax', ['id' => $level->level_id]) }}" method="POST" id="form-edit">
+    <form action="{{ route('supplier.delete_ajax', ['id' => $supplier->supplier_id]) }}" method="POST" id="form-delete">
     @csrf
-    @method('PUT')
+    @method('DELETE')
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Data Level</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Hapus Data Supplier</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <form id="formLevel">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="level_nama">Nama Level</label>
-                            <input type="text" name="level_nama" id="level_nama" class="form-control" required>
-                            <small id="error-level_nama" class="form-text text-danger"></small>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="level_kode">Kode Level</label>
-                            <input type="text" name="level_kode" id="level_kode" class="form-control" required>
-                            <small id="error-level_kode" class="form-text text-danger"></small>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-warning" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                </form>
+                <div class="alert alert-warning">
+                    <h5><i class="icon fas fa-ban"></i> Konfirmasi !!!</h5>
+                    Apakah Anda ingin menghapus data seperti di bawah ini?
+                </div>
+                <table class="table table-sm table-bordered table-striped">
+                    <tr><th class="text-right col-3">Kode Supplier :</th><td class="col-9">{{ $supplier->supplier_kode }}</td></tr>
+                    <tr><th class="text-right col-3">Nama Supplier :</th><td class="col-9">{{ $supplier->supplier_nama }}</td></tr>
+                    <tr><th class="text-right col-3">Alamat Supplier :</th><td class="col-9">{{ $supplier->supplier_alamat }}</td></tr>
+                    <tr><th class="text-right col-3">Nomor Telepon Supplier :</th><td class="col-9">{{ $supplier->supplier_phonenumber }}</td></tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
+                <button type="submit" class="btn btn-primary">Ya, Hapus</button>
             </div>
         </div>
     </div>
     </form>
     <script>
         $(document).ready(function() {
-            $("#form-edit").validate({
-                rules: {
-                    level_nama: {required: true, minlength: 3, maxlength: 20},
-                    level_kode: {required: true, minlength: 3, maxlength: 3},
-                },
+            $("#form-delete").validate({
+                rules: {},
                 submitHandler: function(form) {
                     $.ajax({
                         url: form.action,
@@ -67,7 +59,7 @@
                                     title: 'Berhasil',
                                     text: response.message
                                 });
-                                dataUser.ajax.reload();
+                                dataSupplier.ajax.reload();
                             }else{
                                 $('.error-text').text('');
                                 $.each(response.msgField, function(prefix, val) {
@@ -99,5 +91,6 @@
         $(document).on('click', '[data-dismiss="modal"]', function() {
             $('#myModal').modal('hide');
         });
+
     </script>
 @endempty

@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 use Monolog\Level;
 
@@ -106,4 +107,18 @@ Route::group(['prefix' => 'barang'], function (){
     //route hapus ajax
     Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax'])->name('barang.confirm_ajax');
     Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax'])->name('barang.delete_ajax');
+});
+
+Route::group(['prefix' => 'supplier'], function (){
+    Route::get('/', [SupplierController::class, 'index'])->name('supplier');
+    Route::get('/getsuppliers', [SupplierController::class, 'getsuppliers'])->name('supplier.getsuppliers');
+    // route simpan ajax
+    Route::get('/create_ajax', [SupplierController::class, 'create_ajax'])->name('supplier.create_ajax');
+    Route::post('/store_ajax', [SupplierController::class, 'store_ajax'])->name('supplier.store_ajax');
+    //route edit ajax
+    Route::get('/{id}/edit_ajax', [SupplierController::class, 'edit_ajax'])->name('supplier.edit_ajax');
+    Route::put('/{id}/update_ajax', [SupplierController::class, 'update_ajax'])->name('supplier.update_ajax');
+    //route hapus ajax
+    Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax'])->name('supplier.confirm_ajax');
+    Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax'])->name('supplier.delete_ajax');
 });

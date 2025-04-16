@@ -352,6 +352,11 @@ return [
             'icon' => 'fas fa-fw fa-box',
         ],
         [
+            'text' => 'Supplier',
+            'url' => 'supplier',
+            'icon' => 'fas fa-fw fa-truck',
+        ],
+        [
             'text' => 'multilevel',
             'icon' => 'fas fa-fw fa-share',
             'submenu' => [
