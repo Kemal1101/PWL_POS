@@ -107,5 +107,4 @@
         $(document).on('click', '[data-dismiss="modal"]', function() {
             $('#myModal').modal('hide');
         });
-
     </script>

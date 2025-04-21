@@ -5,6 +5,7 @@
         <div class="card-header">
             <div class="card-tools">
                 <button onclick="modalAction('{{ route('barang.create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
+                <button onclick="modalAction('{{ route('barang.import') }}')" class="btn btn-sm btn-info mt-1">Import Barang</button>
             </div>
         </div>
         <div class="card-body">
