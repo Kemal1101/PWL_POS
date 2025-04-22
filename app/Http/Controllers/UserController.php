@@ -276,4 +276,56 @@ class UserController extends Controller
         $user->delete();
         return redirect('/user');
     }
+
+    public function export_excel(){
+        // ambil data User yang akan di export
+        $user = UserModel::select('nama', 'username', 'level_id')
+            ->orderBy('nama')
+            ->with('level')
+            ->get();
+
+        // load library excel
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        // ambil sheet yang aktif
+
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Nama');
+        $sheet->setCellValue('C1', 'Username');
+        $sheet->setCellvalue('D1', 'Level');
+
+        $sheet->getStyle('A1:D1')->getFont()->setBold(true); // bold header
+        $no = 1; // nomor data dimulai dari 1
+        $baris = 2; // baris data dimulai dari baris ke 2
+        foreach ($user as $key => $value) {
+            $sheet->setCellValue('A'.$baris, $no);
+            $sheet->setCellValue('B'.$baris, $value->nama);
+            $sheet->setCellValue('C'.$baris, $value->username);
+            $sheet->setCellValue('D'.$baris, $value->level->level_nama);
+            $baris++;
+            $no++;
+        }
+        foreach(range('A', 'D') as $columnID) {
+            $sheet->getColumnDimension($columnID)
+                ->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data User'); // set title sheet
+
+        $writer = IOFactory :: createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data User '.date('Y-m-d H:i:s').'.xlsx';
+
+        header('Content-Type: application/vnd. openxmlformats-officedocument. spreadsheetml. sheet');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        header ('Cache-Control: max-age=0');
+        header ('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT' );
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s' ) . ' GMT' );
+        header ('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        $writer->save('php://output');
+        exit;
+    }
 }

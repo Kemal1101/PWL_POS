@@ -50,7 +50,7 @@ class LevelController extends Controller
                 ]);
             }
 
-            // Simpan user dengan hashing password untuk keamanan
+            // Simpan level dengan hashing password untuk keamanan
             LevelModel::create([
                 'level_nama' => $request->level_nama,
                 'level_kode' => $request->level_kode,
@@ -58,7 +58,7 @@ class LevelController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Data user berhasil disimpan'
+                'message' => 'Data level berhasil disimpan'
             ]);
         }
 
@@ -192,5 +192,56 @@ class LevelController extends Controller
             }
         }
         return redirect('/');
+    }
+
+    public function export_excel(){
+        // ambil data level yang akan di export
+        $level = LevelModel::select('level_nama', 'level_kode', 'level_id')
+            ->orderBy('level_nama') // nama kolom sebenarnya, bukan 'nama'
+            ->get(); // <-- WAJIB
+
+        // load library excel
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        // ambil sheet yang aktif
+
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Nama Level');
+        $sheet->setCellValue('C1', 'Kode Level');
+        $sheet->setCellValue('D1', 'ID Level');
+
+        $sheet->getStyle('A1:D1')->getFont()->setBold(true); // bold header
+        $no = 1; // nomor data dimulai dari 1
+        $baris = 2; // baris data dimulai dari baris ke 2
+        foreach ($level as $key => $value) {
+            $sheet->setCellValue('A'.$baris, $no);
+            $sheet->setCellValue('B'.$baris, $value->level_nama);
+            $sheet->setCellValue('C'.$baris, $value->level_kode);
+            $sheet->setCellValue('D'.$baris, $value->level_id);
+            $baris++;
+            $no++;
+        }
+        foreach(range('A', 'D') as $columnID) {
+            $sheet->getColumnDimension($columnID)
+                ->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data Level'); // set title sheet
+
+        $writer = IOFactory :: createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data Level '.date('Y-m-d H:i:s').'.xlsx';
+
+        header('Content-Type: application/vnd. openxmlformats-officedocument. spreadsheetml. sheet');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        header ('Cache-Control: max-age=0');
+        header ('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT' );
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s' ) . ' GMT' );
+        header ('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        $writer->save('php://output');
+        exit;
     }
 }

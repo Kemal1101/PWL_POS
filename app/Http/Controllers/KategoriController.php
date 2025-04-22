@@ -69,7 +69,7 @@ class KategoriController extends Controller
                 ]);
             }
 
-            // Simpan user dengan hashing password untuk keamanan
+            // Simpan Kategori dengan hashing password untuk keamanan
             KategoriModel::create([
                 'kategori_nama' => $request->kategori_nama,
                 'kategori_kode' => $request->kategori_kode,
@@ -77,7 +77,7 @@ class KategoriController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Data user berhasil disimpan'
+                'message' => 'Data Kategori berhasil disimpan'
             ]);
         }
 
@@ -206,5 +206,56 @@ class KategoriController extends Controller
             }
         }
         return redirect('/');
+    }
+
+    public function export_excel(){
+        // ambil data kategori yang akan di export
+        $kategori = KategoriModel::select('kategori_nama', 'kategori_kode', 'kategori_id')
+            ->orderBy('kategori_nama') // nama kolom sebenarnya, bukan 'nama'
+            ->get(); // <-- WAJIB
+
+        // load library excel
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        // ambil sheet yang aktif
+
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Nama Kategori');
+        $sheet->setCellValue('C1', 'Kode Kategori');
+        $sheet->setCellValue('D1', 'ID Kategori');
+
+        $sheet->getStyle('A1:D1')->getFont()->setBold(true); // bold header
+        $no = 1; // nomor data dimulai dari 1
+        $baris = 2; // baris data dimulai dari baris ke 2
+        foreach ($kategori as $key => $value) {
+            $sheet->setCellValue('A'.$baris, $no);
+            $sheet->setCellValue('B'.$baris, $value->kategori_nama);
+            $sheet->setCellValue('C'.$baris, $value->kategori_kode);
+            $sheet->setCellValue('D'.$baris, $value->kategori_id);
+            $baris++;
+            $no++;
+        }
+        foreach(range('A', 'D') as $columnID) {
+            $sheet->getColumnDimension($columnID)
+                ->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data Kategori'); // set title sheet
+
+        $writer = IOFactory :: createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data Kategori '.date('Y-m-d H:i:s').'.xlsx';
+
+        header('Content-Type: application/vnd. openxmlformats-officedocument. spreadsheetml. sheet');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        header ('Cache-Control: max-age=0');
+        header ('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT' );
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s' ) . ' GMT' );
+        header ('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        $writer->save('php://output');
+        exit;
     }
 }

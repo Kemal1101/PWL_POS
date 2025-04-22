@@ -7,6 +7,7 @@
                 {{-- <a class="btn btn-sm btn-primary mt-1" href="{{ route('level.tambah') }}">Tambahhh</a> --}}
                 <button onclick="modalAction('{{ route('level.create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
                 <button onclick="modalAction('{{ route('level.import') }}')" class="btn btn-sm btn-info mt-1">Import Level</button>
+                <a href="{{ route('level.export_excel') }}" class="btn btn-sm btn btn-primary mt-1">Export Level</a>
             </div>
         </div>
         <div class="card-body">
