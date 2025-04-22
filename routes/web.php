@@ -133,6 +133,7 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         //route import ajax
         Route::get('/import', [BarangController::class, 'import'])->name('barang.import');
         Route::post('/import_ajax', [BarangController::class, 'import_ajax'])->name('barang.import_ajax');
+        Route::get('/export_excel', [BarangController::class, 'export_excel'])->name('barang.export_excel');
     });
 });
 
