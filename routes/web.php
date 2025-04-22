@@ -68,6 +68,11 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
             Route::put('/ubah_simpan/{id}', [UserController::class, 'ubah_simpan'])->name('user.ubah_simpan');
 
             Route::get('/hapus/{id}', [UserController::class, 'hapus'])->name('user.hapus');
+
+            //route import export ajax
+            Route::get('/import', [UserController::class, 'import'])->name('user.import');
+            Route::post('/import_ajax', [UserController::class, 'import_ajax'])->name('user.import_ajax');
+            Route::get('/export_excel', [UserController::class, 'export_excel'])->name('user.export_excel');
         });
 
     });
@@ -85,6 +90,10 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
             //route hapus ajax
             Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax'])->name('level.confirm_ajax');
             Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax'])->name('level.delete_ajax');
+            //route import export ajax
+            Route::get('/import', [LevelController::class, 'import'])->name('level.import');
+            Route::post('/import_ajax', [LevelController::class, 'import_ajax'])->name('level.import_ajax');
+            Route::get('/export_excel', [LevelController::class, 'export_excel'])->name('level.export_excel');
         });
     });
 
@@ -100,6 +109,11 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
 
             Route::get('/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax'])->name('kategori.confirm_ajax');
             Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax'])->name('kategori.delete_ajax');
+
+            //route import export ajax
+            Route::get('/import', [KategoriController::class, 'import'])->name('kategori.import');
+            Route::post('/import_ajax', [KategoriController::class, 'import_ajax'])->name('kategori.import_ajax');
+            Route::get('/export_excel', [KategoriController::class, 'export_excel'])->name('kategori.export_excel');
         });
 
         Route::group(['prefix' => 'supplier'], function (){
@@ -114,6 +128,10 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
             //route hapus ajax
             Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax'])->name('supplier.confirm_ajax');
             Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax'])->name('supplier.delete_ajax');
+            //route import export ajax
+            Route::get('/import', [SupplierController::class, 'import'])->name('supplier.import');
+            Route::post('/import_ajax', [SupplierController::class, 'import_ajax'])->name('supplier.import_ajax');
+            Route::get('/export_excel', [SupplierController::class, 'export_excel'])->name('supplier.export_excel');
         });
 
     });
@@ -130,7 +148,7 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         //route hapus ajax
         Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax'])->name('barang.confirm_ajax');
         Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax'])->name('barang.delete_ajax');
-        //route import ajax
+        //route import export ajax
         Route::get('/import', [BarangController::class, 'import'])->name('barang.import');
         Route::post('/import_ajax', [BarangController::class, 'import_ajax'])->name('barang.import_ajax');
         Route::get('/export_excel', [BarangController::class, 'export_excel'])->name('barang.export_excel');

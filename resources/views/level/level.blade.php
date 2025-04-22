@@ -6,6 +6,7 @@
             <div class="card-tools">
                 {{-- <a class="btn btn-sm btn-primary mt-1" href="{{ route('level.tambah') }}">Tambahhh</a> --}}
                 <button onclick="modalAction('{{ route('level.create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
+                <button onclick="modalAction('{{ route('level.import') }}')" class="btn btn-sm btn-info mt-1">Import Level</button>
             </div>
         </div>
         <div class="card-body">

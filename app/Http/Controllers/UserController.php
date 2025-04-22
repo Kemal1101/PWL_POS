@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -159,6 +161,81 @@ class UserController extends Controller
         }
         return redirect('/user');
     }
+
+    public function import()
+     {
+         return view('user.import');
+     }
+
+     public function import_ajax(Request $request)
+     {
+         if($request->ajax() || $request->wantsJson()){
+             $rules = [
+                 // validasi file harus xls atau xlsx, max 1MB
+                 'file_barang' => ['required', 'mimes:xls,xlsx', 'max:1024']
+             ];
+
+             $validator = Validator::make($request->all(), $rules);
+             if($validator->fails()){
+                 return response()->json([
+                     'status' => false,
+                     'message' => 'Validasi Gagal',
+                     'msgField' => $validator->errors()
+                 ]);
+             }
+
+             $file = $request->file('file_barang');  // ambil file dari request
+
+             $reader = IOFactory::createReader('Xlsx');  // load reader file excel
+             $reader->setReadDataOnly(true);             // hanya membaca data
+             $spreadsheet = $reader->load($file->getRealPath()); // load file excel
+             $sheet = $spreadsheet->getActiveSheet();    // ambil sheet yang aktif
+
+             $data = $sheet->toArray(null, false, true, true);   // ambil data excel
+
+             $insert = [];
+             if(count($data) > 1){ // jika data lebih dari 1 baris
+                 foreach ($data as $baris => $value) {
+                    if ($baris > 1) { // baris ke-1 adalah header
+                        $level_nama = $value['C'];
+
+                        // Cari level_id berdasarkan level_nama
+                        $level = LevelModel::where('level_nama', $level_nama)->first();
+
+                        if ($level) {
+                            $insert[] = [
+                                'nama' => $value['A'],
+                                'username' => $value['B'],
+                                'level_id' => $level->level_id,
+                                'password' => Hash::make($value['D']), // Hash password biar aman
+                                'created_at' => now(),
+                            ];
+                        } else {
+                            // Nama level tidak ditemukan
+                            // Bisa ditambahkan ke array error atau log
+                            Log::warning("Level '$level_nama' tidak ditemukan pada baris ke-$baris.");
+                        }
+                    }
+                 }
+
+                 if(count($insert) > 0){
+                     // insert data ke database, jika data sudah ada, maka diabaikan
+                     UserModel::insertOrIgnore($insert);
+                 }
+
+                 return response()->json([
+                     'status' => true,
+                     'message' => 'Data berhasil diimport'
+                 ]);
+             }else{
+                 return response()->json([
+                     'status' => false,
+                     'message' => 'Tidak ada data yang diimport'
+                 ]);
+             }
+         }
+         return redirect('/');
+     }
 
     public function tambah()
     {
