@@ -14,9 +14,18 @@ use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    public function showProfile()
+    {
+        $user = UserModel::with('level')->find(Auth::id());
+
+        return view('profile', compact('user'));
+    }
+
+
     public function index()
     {
         $level_id = \App\Models\LevelModel::all(); // Sesuaikan dengan model level Anda

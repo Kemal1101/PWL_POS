@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Monolog\Level;
 
@@ -35,6 +36,9 @@ Route::post('register', [AuthController::class, 'postRegister'])->name('postRegi
 
 Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam group ini harus login dulu
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
+    Route::post('/profile/upload-photo', [ProfileController::class, 'uploadPhoto'])->name('profile.uploadPhoto');
+
 
     Route::prefix('category')->group(function () {
         Route::get('/food-baverage', [CategoryController::class, 'foodBaverage']);
