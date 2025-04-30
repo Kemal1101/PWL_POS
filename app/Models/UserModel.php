@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\Auth;
 class UserModel extends Authenticatable
 {
     use HasFactory;
+    public function getJWTINdentifier(){
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims(){
+        return [];
+    }
 
     protected $table = 'm_user';
     protected $primaryKey = 'user_id';

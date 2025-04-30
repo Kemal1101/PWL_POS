@@ -304,9 +304,14 @@ return [
         // Navbar items:
         ['header' => 'PENGGUNA'],
         [
+            'text' => 'Profile',
+            'url' => 'profile',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
             'text' => 'User',
             'url' => 'user',
-            'icon' => 'fas fa-fw fa-user',
+            'icon' => 'fas fa-fw fa-users',
         ],
         [
             'text' => 'Level Pengguna',
